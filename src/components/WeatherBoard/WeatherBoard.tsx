@@ -5,6 +5,7 @@ import axiosWeatherHours from "../../store/Slices/weatherHoursSlice/weatherHours
 import styles from "./WeatherBoard.module.css";
 import EachDaysWeather from "../EachDaysWeather/EachDaysWeather";
 import ErrorPage from "../ErrorPage/ErrorPage";
+import Loader from "../Loader/Loader";
 
 function WeatherBoard() {
   const dispatch = useAppDispatch();
@@ -21,10 +22,10 @@ function WeatherBoard() {
   }, [weather_of_hours]);
 
   useEffect(() => {
-    dispatch(axiosWeatherHours({ tempType }));
-    dispatch(axiosWeather({ tempType }));
+    dispatch(axiosWeatherHours({ tempType , city:weather.data?.name }));
+    dispatch(axiosWeather({ tempType , city:weather.data?.name}));
   }, [dispatch, tempType]);
-  
+
   let timeNow = new Date().getHours();
 
   const filteredList = weather_of_hours.data?.list.filter((elem) => {
@@ -39,19 +40,16 @@ function WeatherBoard() {
     }
   });
 
-  console.log(filteredList);
   let weathersOfDay = weather_of_hours.data?.list.slice(
     count * 8,
     count * 8 + 8
   );
 
-  if (weather_of_hours.isLoading) {
-    return <>...Loading</>;
-  } else if (weather_of_hours.isError) {
+  if (weather_of_hours.isLoading || weather.isLoading) {
+    return <Loader/>;
+  } else if (weather_of_hours.isError || weather_of_hours.isError) {
     return <ErrorPage />;
-  }
-
-  else {
+  } else {
     return (
       <div>
         <div className={styles.mainBlock}>
@@ -65,7 +63,7 @@ function WeatherBoard() {
           {weathersOfDay?.map((eachHoursWeather) => (
             <div key={eachHoursWeather.dt_txt}>
               {eachHoursWeather.dt_txt.slice(10)}{" "}
-              {Math.floor(eachHoursWeather.main.temp)}°{tempType.f ? 'F' : 'C'}
+              {Math.floor(eachHoursWeather.main.temp)}°{tempType.f ? "F" : "C"}
               <hr />
             </div>
           ))}
@@ -81,6 +79,7 @@ function WeatherBoard() {
                 dt_txt={eachWeather.dt_txt.slice(5, 10)}
                 temp={Math.floor(eachWeather.main.temp)}
                 setDayTemp={setDayTemp}
+                tempType={tempType}
               />
             </button>
           ))}

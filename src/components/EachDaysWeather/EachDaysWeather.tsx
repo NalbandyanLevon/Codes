@@ -4,6 +4,10 @@ interface IEachDaysWeather {
   dt_txt?: string;
   temp: number;
   setDayTemp: (temp: number) => void;
+  tempType: {
+    c: boolean,
+    f: boolean
+  }
 }
 
 function EachDaysWeather(props: IEachDaysWeather) {
@@ -13,7 +17,7 @@ function EachDaysWeather(props: IEachDaysWeather) {
       onClick={() => props.setDayTemp(props.temp)}
     >
       <div>{props.dt_txt}</div>
-      <div>{props.temp} °C</div>
+      <div>{props.temp} °{props.tempType.f ? "F" : "C"}</div>
     </div>
   );
 }

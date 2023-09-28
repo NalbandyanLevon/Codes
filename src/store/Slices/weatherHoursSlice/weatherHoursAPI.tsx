@@ -23,7 +23,8 @@ const weathereReq: WeatherReq = async (arg) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
+    throw new Error("");
+    
   }
 };
 

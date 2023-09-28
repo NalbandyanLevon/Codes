@@ -21,7 +21,7 @@ function SearchBoard() {
           type="text"
           value={text}
           onChange={(e) => {
-            e.preventDefault();
+            // e.preventDefault();
             setText(e.target.value);
           }}
         />
